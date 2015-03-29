@@ -1,3 +1,36 @@
 [submodule "modules/xcode"]
 	path = modules/xcode
 	url = https://github.com/premake/premake-xcode.git
+[submodule "modules/codelite"]
+	path = modules/codelite
+	url = https://github.com/premake/premake-codelite.git
+[submodule "modules/monodevelop"]
+	path = modules/monodevelop
+	url = https://github.com/premake/premake-monodevelop.git
+[submodule "modules/eclipse"]
+	path = modules/eclipse
+	url = https://github.com/premake/premake-eclipse.git
+[submodule "modules/d"]
+	path = modules/d
+	url = https://github.com/premake/premake-dlang.git
+[submodule "modules/vstool"]
+	path = modules/vstool
+	url = https://github.com/TurkeyMan/premake-vstool.git
+[submodule "modules/android"]
+	path = modules/android
+	url = https://github.com/TurkeyMan/premake-android.git
+[submodule "modules/nacl"]
+	path = modules/nacl
+	url = https://github.com/TurkeyMan/premake-nacl.git
+[submodule "modules/emscripten"]
+	path = modules/emscripten
+	url = https://github.com/TurkeyMan/premake-emscripten.git
+[submodule "modules/netbeans"]
+	path = modules/netbeans
+	url = https://github.com/TurkeyMan/premake-netbeans.git
+[submodule "modules/cmake"]
+	path = modules/cmake
+	url = https://github.com/TurkeyMan/premake-cmake.git
+[submodule "modules/visualgdb"]
+	path = modules/visualgdb
+	url = https://github.com/TurkeyMan/premake-visualgdb.git
