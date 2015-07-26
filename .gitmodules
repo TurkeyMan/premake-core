@@ -10,3 +10,6 @@
 [submodule "modules/d"]
 	path = modules/d
 	url = https://github.com/premake/premake-dlang.git
+[submodule "modules/netbeans"]
+	path = modules/netbeans
+	url = https://github.com/TurkeyMan/premake-netbeans.git
