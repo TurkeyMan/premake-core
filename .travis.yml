@@ -1,44 +1,40 @@
-os:
- - linux
- - osx
+language: c
 
 matrix:
  include:
   - os: linux
-    env: BUILD="linux64" RUN_TESTS=1
+    env: BUILD="linux" RUN_TESTS=1 DEPLOY=binary
   - os: osx
-    env: BUILD="osx" RUN_TESTS=1
+    env: BUILD="macosx" RUN_TESTS=1 DEPLOY=binary
+  - os: linux
+    env: BUILD="mingw" BUILDHOST="linux" RUN_TESTS=0 DEPLOY=binary
+    install:
+     - sudo apt-get install mingw32 mingw32-binutils mingw32-runtime
+  - os: linux
+    env: BUILD="linux" RUN_TESTS=1 DEPLOY=source
+    on:
+      tags: true
 # - os: linux
 #   env: BUILD="linux32" RUN_TESTS=1
 # - os: linux
 #   env: BUILD="linuxarm" RUN_TESTS=0
-# - os: linux
-#   env: BUILD="windows" PREMAKE_OPTS="--os=windows" CC="i686-w64-mingw32-gcc" RUN_TESTS=0 LD_FLAGS=$LD_FLAGS src/lib/libole32.a
 
 
 script:
- - make -f Bootstrap.mak $TRAVIS_OS_NAME
- - if [ $RUN_TESTS == 1 ]; then bin/release/premake5 test; fi
-
-
+ - ./travis_build.sh
 
 
 # Deploy to Github Releases for tag builds
 
 before_deploy:
- - git fetch --unshallow
- - export PATH=$PATH:$(pwd)/bin/release
- - premake5 package $TRAVIS_BRANCH binary noprompt
- - if [ $TRAVIS_OS_NAME = "linux" ]; then premake5 package $TRAVIS_BRANCH source noprompt; fi
- - if [ $TRAVIS_OS_NAME = "windows" ]; then export EXT="zip"; else export EXT="tar.gz"; fi
+ - ./travis_deploy.sh
 
 deploy:
   provider: releases
   api_key:
     secure: GDoSA3Q7tw2xSfZTkozxDMVY4QH1EtzMfsi/NIfgN6dDzkzsDF5rhOYHTanYfrhJwk6F56sA5QDNfiA8nMIvcRAxfDbcWMxN4oo+pNTCRTEQNsYFmNOTB70o7czcDE+xCfAHDuydskTUWI5w/hNv0vMYooYisczQnk7J/XJjKkY=
   file:
-    - "release/premake-$TRAVIS_BRANCH-$TRAVIS_OS_NAME.$EXT"
-    - "release/premake-$TRAVIS_BRANCH-src.zip"
+    - "release/$BUILDNAME"
   skip_cleanup: true
   on:
     tags: true

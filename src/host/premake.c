@@ -14,7 +14,7 @@
 #endif
 
 
-#define VERSION        "r1.0"
+#define VERSION        "r2.0"
 #define COPYRIGHT      "Copyright (C) 2002-2015 Jason Perkins and the Premake Project"
 #define PROJECT_URL    "https://github.com/premake/premake-core/wiki"
 #define ERROR_MESSAGE  "Error: %s\n"

@@ -42,7 +42,7 @@
 -- Make sure I've got what I've need to be happy.
 --
 
-	local required = { "git", "make", "gcc", "premake5", "zip" }
+	local required = { "git", "make", "gcc", "zip" }
 	for _, value in ipairs(required) do
 		local z = execQuiet("%s --version", value)
 		if z ~= 0 then
