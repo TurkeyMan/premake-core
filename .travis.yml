@@ -27,14 +27,19 @@ script:
 # Deploy to Github Releases for tag builds
 
 before_deploy:
- - ./travis_deploy.sh
+ - git fetch --unshallow
+ - export PATH=$PATH:$(pwd)/build/bootstrap
+ - premake5 package $TRAVIS_BRANCH binary noprompt
+ - if [ $TRAVIS_OS_NAME = "linux" ]; then premake5 package $TRAVIS_BRANCH source noprompt; fi
+ - if [ $TRAVIS_OS_NAME = "windows" ]; then export EXT="zip"; else export EXT="tar.gz"; fi
 
 deploy:
   provider: releases
   api_key:
     secure: GDoSA3Q7tw2xSfZTkozxDMVY4QH1EtzMfsi/NIfgN6dDzkzsDF5rhOYHTanYfrhJwk6F56sA5QDNfiA8nMIvcRAxfDbcWMxN4oo+pNTCRTEQNsYFmNOTB70o7czcDE+xCfAHDuydskTUWI5w/hNv0vMYooYisczQnk7J/XJjKkY=
   file:
-    - "release/$BUILDNAME"
+    - "release/premake-$TRAVIS_BRANCH-$TRAVIS_OS_NAME.$EXT"
+    - "release/premake-$TRAVIS_BRANCH-src.zip"
   skip_cleanup: true
   on:
     tags: true
