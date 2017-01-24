@@ -17,21 +17,6 @@
 
 
 --
--- Patch the project table to provide knowledge of D projects
---
-	function p.project.isd(prj)
-		return prj.language == premake.D
-	end
-
---
--- Patch the path table to provide knowledge of D file extenstions
---
-	function path.isdfile(fname)
-		return path.hasextension(fname, { ".d", ".di" })
-	end
-
-
---
 -- Patch actions
 --
 	include( "tools/dmd.lua" )
@@ -40,5 +25,9 @@
 
 	include( "actions/gmake.lua" )
 	include( "actions/vstudio.lua" )
+	-- this one depends on the monodevelop extension
+	if p.modules.monodevelop then
+		include( "actions/monodev.lua" )
+	end
 
 	return m
