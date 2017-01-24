@@ -207,8 +207,8 @@
 
 	function m.make.dTools(cfg, toolset)
 		local tool = toolset.gettoolname(cfg, "dc")
-		if tool then
-			_p('  DC = %s', tool)
+		if tool ~= nil then
+			_p("  DC = %s", tool)
 		end
 	end
 
@@ -227,8 +227,8 @@
 	end
 
 	function m.make.imports(cfg, toolset)
-		local includes = p.esc(toolset.getimportdirs(cfg, cfg.includedirs))
-		_p('  IMPORTS +=%s', make.list(includes))
+		local imports = p.esc(toolset.getimportdirs(cfg, cfg.importdirs))
+		_p('  IMPORTS +=%s', make.list(imports))
 	end
 
 	function m.make.dFlags(cfg, toolset)

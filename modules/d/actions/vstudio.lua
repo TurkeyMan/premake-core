@@ -510,7 +510,7 @@
 			m.visuald.element(2, "otherDMD", '0')
 			m.visuald.element(2, "program", '$(DMDInstallDir)windows\\bin\\dmd.exe')
 
-			m.visuald.element(2, "imppath", cfg.includedirs)
+			m.visuald.element(2, "imppath", cfg.importdirs)
 
 			m.visuald.element(2, "fileImppath")
 			m.visuald.element(2, "outdir", path.translate(project.getrelative(cfg.project, cfg.buildtarget.directory)))

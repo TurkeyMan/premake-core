@@ -295,8 +295,5 @@
 	}
 
 	function gdc.gettoolname(cfg, tool)
-		if (cfg.gccprefix and gdc.tools[tool]) or tool == "rc" then
-			return (cfg.gccprefix or "") .. gdc.tools[tool]
-		end
-		return nil
+		return (cfg.gccprefix or "") .. gdc.tools[tool]
 	end

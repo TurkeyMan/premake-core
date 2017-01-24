@@ -75,7 +75,7 @@
 	end
 
 	function suite.dmd_imports()
-		includedirs { "dir1", "dir2/" }
+		importdirs { "dir1", "dir2/" }
 		prepare_cfg({ m.make.imports })
 		test.capture [[
   IMPORTS += -I=dir1 -I=dir2
