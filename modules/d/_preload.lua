@@ -122,5 +122,5 @@
 --
 
 	return function (cfg)
-		return (cfg.language == p.D)
+		return (cfg.language == p.D or cfg.language == "C" or cfg.language == "C++")
 	end

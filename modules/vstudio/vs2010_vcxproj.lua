@@ -138,7 +138,7 @@
 	end
 
 	function m.globals(prj)
-	
+
 		-- Write out the project-level globals
 		m.propertyGroup(nil, "Globals")
 		p.callArray(m.elements.globals, prj)
@@ -146,7 +146,7 @@
 
 		-- Write out the configurable globals
 		for cfg in project.eachconfig(prj) do
-		
+
 			-- Find out whether we're going to actually write a property out
 			local captured = p.capture(	function()
 										p.push()
@@ -160,7 +160,7 @@
 				p.callArray(m.elements.globalsCondition, prj, cfg)
 				p.pop('</PropertyGroup>')
 			end
-			
+
 		end
 
 	end
@@ -302,6 +302,7 @@
 		else
 			return {
 				m.clCompile,
+				m.dCompile,
 				m.fxCompile,
 				m.resourceCompile,
 				m.linker,
@@ -390,6 +391,25 @@
 		p.push('<ClCompile>')
 		p.callArray(m.elements.clCompile, cfg)
 		p.pop('</ClCompile>')
+	end
+
+
+--
+-- Write the <DCompile> settings block.
+--
+
+	m.elements.dCompile = function(cfg)
+		local calls = {
+			m.dOptimization
+		}
+
+		return calls
+	end
+
+	function m.dCompile(cfg)
+		p.push('<DCompile>')
+		p.callArray(m.elements.dCompile, cfg)
+		p.pop('</DCompile>')
 	end
 
 
@@ -762,13 +782,44 @@
 		end
 	}
 
+
 ---
--- ClCompile group
+-- DCompile group
+---
+	m.categories.DCompile = {
+		name       = "DCompile",
+		extensions = { ".d" },
+		priority   = 3,
+
+		emitFiles = function(prj, group)
+			local fileCfgFunc = function(fcfg, condition)
+				if fcfg then
+					return {
+						m.excludedFromBuild,
+						-- todo: support per-file config
+					}
+				else
+					return {
+						m.excludedFromBuild
+					}
+				end
+			end
+
+			m.emitFiles(prj, group, "DCompile", {m.generatedFile}, fileCfgFunc)
+		end,
+
+		emitFilter = function(prj, group)
+			m.filterGroup(prj, group, "DCompile")
+		end
+	}
+
+---
+-- FxCompile group
 ---
 	m.categories.FxCompile = {
 		name	   = "FxCompile",
 		extensions = { ".hlsl" },
-		priority   = 3,
+		priority   = 4,
 
 		emitFiles = function(prj, group)
 			local fileCfgFunc = function(fcfg, condition)
@@ -807,7 +858,7 @@
 ---
 	m.categories.None = {
 		name = "None",
-		priority = 4,
+		priority = 5,
 
 		emitFiles = function(prj, group)
 			m.emitFiles(prj, group, "None", {m.generatedFile})
@@ -825,7 +876,7 @@
 	m.categories.ResourceCompile = {
 		name       = "ResourceCompile",
 		extensions = ".rc",
-		priority   = 5,
+		priority   = 6,
 
 		emitFiles = function(prj, group)
 			local fileCfgFunc = {
@@ -848,7 +899,7 @@
 ---
 	m.categories.CustomBuild = {
 		name = "CustomBuild",
-		priority = 6,
+		priority = 7,
 
 		emitFiles = function(prj, group)
 			local fileFunc = {
@@ -881,7 +932,7 @@
 	m.categories.Midl = {
 		name       = "Midl",
 		extensions = ".idl",
-		priority   = 7,
+		priority   = 8,
 
 		emitFiles = function(prj, group)
 			local fileCfgFunc = {
@@ -905,7 +956,7 @@
 	m.categories.Masm = {
 		name       = "Masm",
 		extensions = ".asm",
-		priority   = 8,
+		priority   = 9,
 
 		emitFiles = function(prj, group)
 			local fileCfgFunc = function(fcfg, condition)
@@ -944,7 +995,7 @@
 	m.categories.Image = {
 		name       = "Image",
 		extensions = { ".gif", ".jpg", ".jpe", ".png", ".bmp", ".dib", "*.tif", "*.wmf", "*.ras", "*.eps", "*.pcx", "*.pcd", "*.tga", "*.dds" },
-		priority   = 9,
+		priority   = 10,
 
 		emitFiles = function(prj, group)
 			local fileCfgFunc = function(fcfg, condition)
@@ -967,7 +1018,7 @@
 	m.categories.Natvis = {
 		name       = "Natvis",
 		extensions = { ".natvis" },
-		priority   = 10,
+		priority   = 11,
 
 		emitFiles = function(prj, group)
 			m.emitFiles(prj, group, "Natvis", {m.generatedFile})
@@ -2504,9 +2555,9 @@
 		m.element("TargetName", nil, "%s%s", cfg.buildtarget.prefix, cfg.buildtarget.basename)
 	end
 
-	
+
 	function m.targetPlatformVersion(cfgOrPrj)
-	
+
 		if _ACTION >= "vs2015" then
 			local min = project.systemversion(cfgOrPrj)
 			-- handle special "latest" version
@@ -2514,12 +2565,12 @@
 				-- vs2015 and lower can't build against SDK 10
 				min = iif(_ACTION >= "vs2017", m.latestSDK10Version(), nil)
 			end
-			
+
 			return min
 		end
-	
+
 	end
-	
+
 
 	function m.targetPlatformVersionGlobal(prj)
 		local min = m.targetPlatformVersion(prj)
@@ -2527,18 +2578,18 @@
 			m.element("WindowsTargetPlatformVersion", nil, min)
 		end
 	end
-	
+
 
 	function m.targetPlatformVersionCondition(prj, cfg)
-	
+
 		local cfgPlatformVersion = m.targetPlatformVersion(cfg)
 		local prjPlatformVersion = m.targetPlatformVersion(prj)
-		
+
 		if cfgPlatformVersion ~= nil and cfgPlatformVersion ~= prjPlatformVersion then
 		    m.element("WindowsTargetPlatformVersion", nil, cfgPlatformVersion)
 		end
 	end
-	
+
 
 	function m.preferredToolArchitecture(prj)
 		if _ACTION >= "vs2013" then
@@ -2640,6 +2691,14 @@
 		p.xmlUtf8()
 	end
 
+
+
+	function m.dOptimization(cfg, condition)
+		local map = { Off="false", On="true", Debug="true", Full="true", Size="true", Speed="true" }
+		if cfg.optimize then
+			m.element('Optimizer', condition, map[cfg.optimize] or "false")
+		end
+	end
 
 	function m.fxCompilePreprocessorDefinition(cfg, condition)
 		if cfg.shaderdefines and #cfg.shaderdefines > 0 then
