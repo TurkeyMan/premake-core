@@ -400,7 +400,13 @@
 
 	m.elements.dCompile = function(cfg)
 		local calls = {
-			m.dOptimization
+			m.dOptimization,
+			m.dAdditionalDependencies,
+			m.dVersionConstants,
+			m.dDebugConstants,
+			m.dCompilationModel,
+			m.dRuntime,
+			m.dCodeGeneration,
 		}
 
 		return calls
@@ -784,7 +790,7 @@
 
 
 ---
--- DCompile group
+-- DCompile group 
 ---
 	m.categories.DCompile = {
 		name       = "DCompile",
@@ -796,7 +802,13 @@
 				if fcfg then
 					return {
 						m.excludedFromBuild,
-						-- todo: support per-file config
+						m.dOptimization,
+						m.dAdditionalDependencies,
+						m.dVersionConstants,
+						m.dDebugConstants,
+						m.dCompilationModel,
+						m.dRuntime,
+						m.dCodeGeneration,
 					}
 				else
 					return {
@@ -2691,7 +2703,9 @@
 		p.xmlUtf8()
 	end
 
-
+	--------------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------
+	-- D Functions
 
 	function m.dOptimization(cfg, condition)
 		local map = { Off="false", On="true", Debug="true", Full="true", Size="true", Speed="true" }
@@ -2699,6 +2713,125 @@
 			m.element('Optimizer', condition, map[cfg.optimize] or "false")
 		end
 	end
+	
+
+	function m.dAdditionalDependencies(cfg, explicit)
+		local links
+
+		-- check to see if this project uses an external toolset. If so, let the
+		-- toolset define the format of the links
+		local toolset = config.toolset(cfg)
+		if toolset then
+			links = toolset.getlinks(cfg, not explicit)
+		else
+			links = vstudio.getLinks(cfg, explicit)
+		end
+
+		if #links > 0 then
+			links = path.translate(table.concat(links, ";"))
+			m.element("ImportPaths", links)
+		end
+	end
+
+
+	function m.dVersionConstants(cfg, condition)
+		if cfg.versionconstants then
+			local versionconstants = table.concat(cfg.versionconstants, ";")
+			m.element("VersionIdentifiers", condition, versionconstants)
+		end
+	end
+
+
+	function m.dDebugConstants(cfg, condition)
+		if cfg.debugconstants then
+			local debugconstants = table.concat(cfg.debugconstants, ";")
+			m.element("DebugIdentifiers", condition, debugconstants)
+		end
+	end
+
+
+	function m.dCompilationModel(cfg, condition)
+		if cfg.compilationmodel then
+			if cfg.compilationmodel == "Project" then
+				m.element("CompilationModel", condition, "Package")
+			elseif cfg.compilationmodel == "Package" then
+				m.element("CompilationModel", condition, "Package")
+			elseif cfg.compilationmodel == "File" then
+				m.element("CompilationModel", condition, "Package")
+			end
+		end
+	end
+
+
+	function m.dRuntime(cfg, condition)
+		local releaseruntime = true
+		local staticruntime = true
+		if cfg.staticruntime then
+			if cfg.staticruntime == "Off" then
+				staticruntime = false
+			end
+		end
+		if cfg.runtime then
+			if cfg.runtime == "Debug" then
+				releaseruntime = false
+			end
+		end
+		if cfg.staticruntime or cfg.runtime then
+			if staticruntime == true and releaseruntime == true then
+				m.element("CRuntimeLibrary", condition, "MultiThreaded")
+			elseif staticruntime == true and releaseruntime == false then
+				m.element("CRuntimeLibrary", condition, "MultiThreadedDebug")
+			elseif staticruntime == false and releaseruntime == true then
+				m.element("CRuntimeLibrary", condition, "MultiThreadedDll")
+			elseif staticruntime == false and releaseruntime == false then
+				m.element("CRuntimeLibrary", condition, "MultiThreadedDebugDll")
+			end
+		end
+	end
+
+	
+	function m.dCodeGeneration(cfg, condition)
+		local isOptimised = config.isOptimizedBuild(cfg)
+		if cfg.flags.Profile then
+			if cfg.flags.Profile == true then
+				m.element("Profile", condition, "true")
+			else
+				m.element("Profile", condition, "false")
+			end
+		end
+		if cfg.flags.CodeCoverage then
+			if cfg.flags.CodeCoverage == true then
+				m.element("Coverage", condition, "true")
+			else
+				m.element("Coverage", condition, "false")
+			end
+		end
+		if cfg.flags.UnitTest then
+			if cfg.flags.UnitTest == true then
+				m.element("Unittest", condition, "true")
+			else
+				m.element("Unittest", condition, "false")
+			end
+		end
+		if isOptimised == true then
+			m.element("Optimizer", condition, "true")
+		else
+			m.element("Optimizer", condition, "false")
+		end
+		if cfg.inlining then
+			local types = {
+				Default = "true",
+				Disabled = "false",
+				Explicit = "true",
+				Auto = "true",
+			}
+			m.element("Inliner", condition, types[cfg.inlining])
+		end
+	end
+
+	-- D Functions
+	--------------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------
 
 	function m.fxCompilePreprocessorDefinition(cfg, condition)
 		if cfg.shaderdefines and #cfg.shaderdefines > 0 then
