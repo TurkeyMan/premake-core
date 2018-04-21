@@ -38,37 +38,3 @@ Distributed under the terms of the BSD License, see LICENSE.txt
 
 The Lua language and runtime library is &copy; TeCGraf, PUC-Rio.
 See their website at http://www.lua.org/
-
-### TEMP
-   V   <ImportPaths>"E:\Game Programming\Recent Works\DRCR\source\";"E:\Game Programming\Recent Works\DRCR\source\unittest\"
-   X   <StringImportPaths>here
-   V   <VersionIdentifiers>here
-   V   <DebugIdentifiers>here
-   V   <CompilationModel>File
-   X   <ObjectFileName>here
-   V   <CRuntimeLibrary>MultiThreadedDll
-
-   V   <Profile>true
-   V   <ProfileGC>true
-   V   <Coverage>true
-   X   <MinCoverage>AAA
-   V   <Unittest>true
-   V   <Optimizer>true
-   V   <Inliner>true
-   V   <StackFrame>true
-   V   <StackStomp>true
-   V   <AllInst>true
-   V   <BetterC>true
-   V   <Main>true
-   V   <DebugCode>Release
-   V   <DebugInfo>None
-   X   <BoundsCheck>Off
-   V   <PerformSyntaxCheckOnly>true
-
-   V   ShowCommandLine
-   V   Verbose
-   V   ShowTLS
-   V   ShowGC
-   V   IgnorePragma
-   V   ShowDependencies
-

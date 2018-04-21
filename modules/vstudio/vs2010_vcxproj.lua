@@ -2854,21 +2854,21 @@
 			}
 			m.element("BoundsCheck", condition, types[cfg.boundscheck])
 		end
-		if cfg.debuginfo then
+		if cfg.debugcode then
 			local types = {
 				DebugFull = "Debug",
 				DebugLight = "Default",
 				Release = "Release",
 			}
-			m.element("DebugCode", condition, types[cfg.debuginfo])
+			m.element("DebugCode", condition, types[cfg.debugcode])
 		end
-		if cfg.debugcode then
+		if cfg.debuginfo then
 			local types = {
 				None = "None",
 				VS = "VS",
 				Mago = "Mago",
 			}
-			m.element("DebugInfo", condition, types[cfg.debugcode])
+			m.element("DebugInfo", condition, types[cfg.debuginfo])
 		end
 		if cfg.flags.ProfileGC then
 			if cfg.flags.ProfileGC == true then
