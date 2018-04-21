@@ -39,6 +39,17 @@ to your project definition and populate with .d files.
 * [docname](https://github.com/premake/premake-dlang/wiki/docname)
 * [headerdir](https://github.com/premake/premake-dlang/wiki/headerdir)
 * [headername](https://github.com/premake/premake-dlang/wiki/headername)
+$todo
+* debuginfo None = "None",
+			VS = "VS",
+			Mago = "Mago",
+* Flags "ProfileGC",
+		"StackFrame",
+		"StackStomp",
+		"AllInst",
+		"BetterC",
+		"Main",
+		"PerformSyntaxCheckOnly",
 
 ### Example ###
 

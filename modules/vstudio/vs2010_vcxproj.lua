@@ -402,11 +402,14 @@
 		local calls = {
 			m.dOptimization,
 			m.dAdditionalDependencies,
+			m.dStringImportPaths,
 			m.dVersionConstants,
 			m.dDebugConstants,
 			m.dCompilationModel,
 			m.dRuntime,
 			m.dCodeGeneration,
+			m.dMessages,
+			m.dDocumentation,
 		}
 
 		return calls
@@ -804,11 +807,14 @@
 						m.excludedFromBuild,
 						m.dOptimization,
 						m.dAdditionalDependencies,
+						m.dStringImportPaths,
 						m.dVersionConstants,
 						m.dDebugConstants,
 						m.dCompilationModel,
 						m.dRuntime,
 						m.dCodeGeneration,
+						m.dMessages,
+						m.dDocumentation,
 					}
 				else
 					return {
@@ -2732,6 +2738,14 @@
 			m.element("ImportPaths", links)
 		end
 	end
+	
+
+	function m.dStringImportPaths(cfg, condition)
+		if cfg.stringimportpaths then
+			local stringimportpaths = table.concat(cfg.stringimportpaths, ";")
+			m.element("StringImportPaths", condition, stringimportpaths)
+		end
+	end
 
 
 	function m.dVersionConstants(cfg, condition)
@@ -2740,7 +2754,7 @@
 			m.element("VersionIdentifiers", condition, versionconstants)
 		end
 	end
-
+	
 
 	function m.dDebugConstants(cfg, condition)
 		if cfg.debugconstants then
@@ -2792,6 +2806,11 @@
 	
 	function m.dCodeGeneration(cfg, condition)
 		local isOptimised = config.isOptimizedBuild(cfg)
+		
+		if cfg.buildtarget.basename then
+			m.element("ObjectFileName", nil, "%s%s", cfg.buildtarget.prefix, cfg.buildtarget.basename)
+		end
+
 		if cfg.flags.Profile then
 			if cfg.flags.Profile == true then
 				m.element("Profile", condition, "true")
@@ -2826,6 +2845,163 @@
 				Auto = "true",
 			}
 			m.element("Inliner", condition, types[cfg.inlining])
+		end
+		if cfg.boundscheck then
+			local types = {
+				Off = "Off",
+				SafeOnly = "SafeOnly",
+				On = "On",
+			}
+			m.element("BoundsCheck", condition, types[cfg.boundscheck])
+		end
+		if cfg.debuginfo then
+			local types = {
+				DebugFull = "Debug",
+				DebugLight = "Default",
+				Release = "Release",
+			}
+			m.element("DebugCode", condition, types[cfg.debuginfo])
+		end
+		if cfg.debugcode then
+			local types = {
+				None = "None",
+				VS = "VS",
+				Mago = "Mago",
+			}
+			m.element("DebugInfo", condition, types[cfg.debugcode])
+		end
+		if cfg.flags.ProfileGC then
+			if cfg.flags.ProfileGC == true then
+				m.element("ProfileGC", condition, "true")
+			else
+				m.element("ProfileGC", condition, "false")
+			end
+		end
+		if cfg.flags.StackFrame then
+			if cfg.flags.StackFrame == true then
+				m.element("StackFrame", condition, "true")
+			else
+				m.element("StackFrame", condition, "false")
+			end
+		end
+		if cfg.flags.StackStomp then
+			if cfg.flags.StackStomp == true then
+				m.element("StackStomp", condition, "true")
+			else
+				m.element("StackStomp", condition, "false")
+			end
+		end
+		if cfg.flags.AllInst then
+			if cfg.flags.AllInst == true then
+				m.element("AllInst", condition, "true")
+			else
+				m.element("AllInst", condition, "false")
+			end
+		end
+		if cfg.flags.BetterC then
+			if cfg.flags.BetterC == true then
+				m.element("BetterC", condition, "true")
+			else
+				m.element("BetterC", condition, "false")
+			end
+		end
+		if cfg.flags.Main then
+			if cfg.flags.Main == true then
+				m.element("Main", condition, "true")
+			else
+				m.element("Main", condition, "false")
+			end
+		end
+		if cfg.flags.PerformSyntaxCheckOnly then
+			if cfg.flags.PerformSyntaxCheckOnly == true then
+				m.element("PerformSyntaxCheckOnly", condition, "true")
+			else
+				m.element("PerformSyntaxCheckOnly", condition, "false")
+			end
+		end
+	end
+		
+
+	function m.dMessages(cfg, condition)
+		if cfg.dwarnings then
+			local types = {
+				Error = "Error",
+				Info = "Info",
+				None = "None",
+			}
+			m.element("Warnings", condition, types[cfg.dwarnings])
+		end
+		if cfg.deprecatedfeatures then
+			local types = {
+				Error = "Error",
+				Info = "Info",
+				Allow = "Allow",
+			}
+			m.element("Deprecations", condition, types[cfg.deprecatedfeatures])
+		end
+		if cfg.flags.ShowCommandLine then
+			if cfg.flags.ShowCommandLine == true then
+				m.element("ShowCommandLine", condition, "true")
+			else
+				m.element("ShowCommandLine", condition, "false")
+			end
+		end
+		if cfg.flags.Verbose then
+			if cfg.flags.Verbose == true then
+				m.element("Verbose", condition, "true")
+			else
+				m.element("Verbose", condition, "false")
+			end
+		end
+		if cfg.flags.ShowTLS then
+			if cfg.flags.ShowTLS == true then
+				m.element("ShowTLS", condition, "true")
+			else
+				m.element("ShowTLS", condition, "false")
+			end
+		end
+		if cfg.flags.ShowGC then
+			if cfg.flags.ShowGC == true then
+				m.element("ShowGC", condition, "true")
+			else
+				m.element("ShowGC", condition, "false")
+			end
+		end
+		if cfg.flags.IgnorePragma then
+			if cfg.flags.IgnorePragma == true then
+				m.element("IgnorePragma", condition, "true")
+			else
+				m.element("IgnorePragma", condition, "false")
+			end
+		end
+		if cfg.flags.ShowDependencies then
+			if cfg.flags.ShowDependencies == true then
+				m.element("ShowDependencies", condition, "true")
+			else
+				m.element("ShowDependencies", condition, "false")
+			end
+		end
+	end
+
+	
+	function m.dDocumentation(cfg, condition)
+		if cfg.docdir then
+			m.element("DocDir", condition, cfg.docdir)
+		end
+		if cfg.docname then
+			m.element("DocFile", condition, cfg.docname)
+		end
+		if cfg.dependenciesfile then
+			m.element("DepFile", condition, cfg.dependenciesfile)
+		end
+		if cfg.headerdir then
+			m.element("HeaderDir", condition, cfg.headerdir)
+		end
+		if cfg.headername then
+			m.element("HeaderFile", condition, cfg.headername)
+		end
+		if cfg.jsonfile then
+			m.element("JSONFile", condition, cfg.jsonfile)
 		end
 	end
 

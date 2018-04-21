@@ -39,6 +39,22 @@
 		"SymbolsLikeC",
 		"UnitTest",
 		"Verbose",
+		-- These are used by C++/D mixed $todo move them somewhere else? "flags2" "Dflags"?
+		-- [Code Generation Flags]
+		"ProfileGC",
+		"StackFrame",
+		"StackStomp",
+		"AllInst",
+		"BetterC",
+		"Main",
+		"PerformSyntaxCheckOnly",
+		-- [Messages Flags]
+		"ShowCommandLine",
+		--"Verbose",
+		"ShowTLS",
+		"ShowGC",
+		"IgnorePragma",
+		"ShowDependencies",
 	})
 
 
@@ -100,6 +116,61 @@
 		tokens = true,
 	}
 
+	api.register {
+		name = "debuginfo",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
+
+	api.register {
+		name = "debugcode",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
+	
+	api.register {
+		name = "stringimportpaths",
+		scope = "config",
+		kind = "list:string",
+		tokens = true,
+	}
+
+	api.register {
+		name = "dwarnings",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
+
+	api.register {
+		name = "deprecatedfeatures",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
+	
+	api.register {
+		name = "boundscheck",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
+
+	api.register {
+		name = "dependenciesfile",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
+	
+	api.register {
+		name = "jsonfile",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
 
 --
 -- Provide information for the help output

@@ -40,27 +40,35 @@ The Lua language and runtime library is &copy; TeCGraf, PUC-Rio.
 See their website at http://www.lua.org/
 
 ### TEMP
-   V   <ImportPaths>"E:\Game Programming\Recent Works\DRCR\source\";"E:\Game Programming\Recent Works\DRCR\source\unittest\"</ImportPaths>
-   X   <StringImportPaths>here</StringImportPaths>
-   V   <VersionIdentifiers>here</VersionIdentifiers>
-   V   <DebugIdentifiers>here</DebugIdentifiers>
-   V   <CompilationModel>File</CompilationModel>                Project,Package,File
-   X   <ObjectFileName>here</ObjectFileName>
-   V   <CRuntimeLibrary>MultiThreadedDll</CRuntimeLibrary>
+   V   <ImportPaths>"E:\Game Programming\Recent Works\DRCR\source\";"E:\Game Programming\Recent Works\DRCR\source\unittest\"
+   X   <StringImportPaths>here
+   V   <VersionIdentifiers>here
+   V   <DebugIdentifiers>here
+   V   <CompilationModel>File
+   X   <ObjectFileName>here
+   V   <CRuntimeLibrary>MultiThreadedDll
 
-   V   <Profile>true</Profile> 			flags.Profile
-   X   <ProfileGC>true</ProfileGC> 		flags.CodeCoverage
-   V   <Coverage>true</Coverage> 		
-   X   <MinCoverage>AAA</MinCoverage>
-   V   <Unittest>true</Unittest> 		flags.UnitTest
-   V   <Optimizer>true</Optimizer> 		config.isOptimizedBuild(cfg)
-   V   <Inliner>true</Inliner> 			flags.Inline
-   X   <StackFrame>true</StackFrame>
-   X   <StackStomp>true</StackStomp>
-   X   <AllInst>true</AllInst>
-   X   <BetterC>true</BetterC>
-   X   <Main>true</Main>
-   X   <DebugCode>Release</DebugCode>
-   X   <DebugInfo>None</DebugInfo>
-   X   <BoundsCheck>Off</BoundsCheck>
-   X   <PerformSyntaxCheckOnly>true</PerformSyntaxCheckOnly>
+   V   <Profile>true
+   V   <ProfileGC>true
+   V   <Coverage>true
+   X   <MinCoverage>AAA
+   V   <Unittest>true
+   V   <Optimizer>true
+   V   <Inliner>true
+   V   <StackFrame>true
+   V   <StackStomp>true
+   V   <AllInst>true
+   V   <BetterC>true
+   V   <Main>true
+   V   <DebugCode>Release
+   V   <DebugInfo>None
+   X   <BoundsCheck>Off
+   V   <PerformSyntaxCheckOnly>true
+
+   V   ShowCommandLine
+   V   Verbose
+   V   ShowTLS
+   V   ShowGC
+   V   IgnorePragma
+   V   ShowDependencies
+
