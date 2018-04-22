@@ -44,7 +44,7 @@
 		"ProfileGC",
 		"StackFrame",
 		"StackStomp",
-		"AllInst",
+		"AllTemplateInst",
 		"BetterC",
 		"Main",
 		"PerformSyntaxCheckOnly",

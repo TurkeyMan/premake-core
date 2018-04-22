@@ -401,7 +401,7 @@
 	m.elements.dCompile = function(cfg)
 		local calls = {
 			m.dOptimization,
-			m.dAdditionalDependencies,
+			m.dAdditionalIncludeDirectories,
 			m.dStringImportPaths,
 			m.dVersionConstants,
 			m.dDebugConstants,
@@ -806,7 +806,7 @@
 					return {
 						m.excludedFromBuild,
 						m.dOptimization,
-						m.dAdditionalDependencies,
+						m.dAdditionalIncludeDirectories,
 						m.dStringImportPaths,
 						m.dVersionConstants,
 						m.dDebugConstants,
@@ -2721,28 +2721,17 @@
 	end
 	
 
-	function m.dAdditionalDependencies(cfg, explicit)
-		local links
-
-		-- check to see if this project uses an external toolset. If so, let the
-		-- toolset define the format of the links
-		local toolset = config.toolset(cfg)
-		if toolset then
-			links = toolset.getlinks(cfg, not explicit)
-		else
-			links = vstudio.getLinks(cfg, explicit)
-		end
-
-		if #links > 0 then
-			links = path.translate(table.concat(links, ";"))
-			m.element("ImportPaths", links)
+	function m.dAdditionalIncludeDirectories(cfg, condition)
+		if cfg.includedirs then
+			local includedirs = table.concat(cfg.includedirs, ";") .. ";%%(ImportPaths)"
+			m.element("ImportPaths", condition, includedirs)
 		end
 	end
 	
 
 	function m.dStringImportPaths(cfg, condition)
 		if cfg.stringimportpaths then
-			local stringimportpaths = table.concat(cfg.stringimportpaths, ";")
+			local stringimportpaths = table.concat(cfg.stringimportpaths, ";") .. ";%%(StringImportPaths)"
 			m.element("StringImportPaths", condition, stringimportpaths)
 		end
 	end
@@ -2807,8 +2796,19 @@
 	function m.dCodeGeneration(cfg, condition)
 		local isOptimised = config.isOptimizedBuild(cfg)
 		
-		if cfg.buildtarget.basename then
-			m.element("ObjectFileName", nil, "%s%s", cfg.buildtarget.prefix, cfg.buildtarget.basename)
+		if cfg.buildtarget then
+			local ObjectFileName = ""
+			if cfg.buildtarget.directory then
+				local outdir = vstudio.path(cfg, cfg.buildtarget.directory)
+				ObjectFileName = outdir
+			end
+			if cfg.buildtarget.prefix then
+				ObjectFileName = ObjectFileName .. cfg.buildtarget.prefix
+			end
+			if cfg.buildtarget.basename then
+				ObjectFileName = ObjectFileName .. cfg.buildtarget.basename .. ".obj"
+			end
+			m.element("ObjectFileName", condition, ObjectFileName)
 		end
 
 		if cfg.flags.Profile then
@@ -2891,8 +2891,8 @@
 				m.element("StackStomp", condition, "false")
 			end
 		end
-		if cfg.flags.AllInst then
-			if cfg.flags.AllInst == true then
+		if cfg.flags.AllTemplateInst then
+			if cfg.flags.AllTemplateInst == true then
 				m.element("AllInst", condition, "true")
 			else
 				m.element("AllInst", condition, "false")
