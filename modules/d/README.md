@@ -35,7 +35,7 @@ C and C++ projects that include .d files will also support some of the API below
   * ProfileGC (C/C++)
   * StackFrame (C/C++)
   * StackStomp (C/C++)
-  * AllInst (C/C++)
+  * AllTemplateInst (C/C++)
   * BetterC (C/C++)
   * Main (C/C++)
   * PerformSyntaxCheckOnly (C/C++)
