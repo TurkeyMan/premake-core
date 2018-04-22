@@ -16,9 +16,9 @@ to your project definition and populate with .d files.
 C and C++ projects that include .d files will also support some of the API below. Any API tagged with (D/C/C++) works in D and C/C++ projects. Any API tagged with (C/C++) only works for .d files in C/C++ projects.
 
 ### APIs ###
-
+## D ##
 * [flags](https://github.com/premake/premake-dlang/wiki/flags)
-  * CodeCoverage  (D/C/C++)
+  * CodeCoverage
   * Deprecated
   * Documentation
   * GenerateHeader
@@ -30,28 +30,41 @@ C and C++ projects that include .d files will also support some of the API below
   * RetainPaths
   * SeparateCompilation
   * SymbolsLikeC
-  * UnitTest (D/C/C++)
-  * Verbose (D/C/C++)
-  * ProfileGC (C/C++)
-  * StackFrame (C/C++)
-  * StackStomp (C/C++)
-  * AllTemplateInst (C/C++)
-  * BetterC (C/C++)
-  * Main (C/C++)
-  * PerformSyntaxCheckOnly (C/C++)
-  * ShowCommandLine (C/C++)
-  * ShowTLS (C/C++)
-  * ShowGC (C/C++)
-  * IgnorePragma (C/C++)
-  * ShowDependencies (C/C++)
-* [versionconstants](https://github.com/premake/premake-dlang/wiki/versionconstants) (D/C/C++)
+  * UnitTest
+  * Verbose
+* [versionconstants](https://github.com/premake/premake-dlang/wiki/versionconstants)
 * [versionlevel](https://github.com/premake/premake-dlang/wiki/versionlevel)
-* [debugconstants](https://github.com/premake/premake-dlang/wiki/debugconstants) (D/C/C++)
+* [debugconstants](https://github.com/premake/premake-dlang/wiki/debugconstants)
 * [debuglevel](https://github.com/premake/premake-dlang/wiki/debuglevel)
-* [docdir](https://github.com/premake/premake-dlang/wiki/docdir) (D/C/C++)
-* [docname](https://github.com/premake/premake-dlang/wiki/docname) (D/C/C++)
-* [headerdir](https://github.com/premake/premake-dlang/wiki/headerdir) (D/C/C++)
-* [headername](https://github.com/premake/premake-dlang/wiki/headername) (D/C/C++)
+* [docdir](https://github.com/premake/premake-dlang/wiki/docdir)
+* [docname](https://github.com/premake/premake-dlang/wiki/docname)
+* [headerdir](https://github.com/premake/premake-dlang/wiki/headerdir)
+* [headername](https://github.com/premake/premake-dlang/wiki/headername)
+
+## C/C++ ##
+
+* [flags](https://github.com/premake/premake-dlang/wiki/flags)
+  * CodeCoverage
+  * UnitTest 
+  * Verbose 
+  * ProfileGC 
+  * StackFrame 
+  * StackStomp 
+  * AllTemplateInst 
+  * BetterC 
+  * Main 
+  * PerformSyntaxCheckOnly 
+  * ShowCommandLine 
+  * ShowTLS 
+  * ShowGC 
+  * IgnorePragma 
+  * ShowDependencies 
+* [versionconstants](https://github.com/premake/premake-dlang/wiki/versionconstants)
+* [debugconstants](https://github.com/premake/premake-dlang/wiki/debugconstants)
+* [docdir](https://github.com/premake/premake-dlang/wiki/docdir)
+* [docname](https://github.com/premake/premake-dlang/wiki/docname)
+* [headerdir](https://github.com/premake/premake-dlang/wiki/headerdir)
+* [headername](https://github.com/premake/premake-dlang/wiki/headername)
 $todo
 * dependenciesfile (C/C++)
 * jsonfile (C/C++)
@@ -79,7 +92,7 @@ $todo
         "Error",
         "Info",
         "Allow",
-
+		
 ### Example ###
 
 The contents of your premake5.lua file would be:
