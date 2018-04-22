@@ -59,7 +59,10 @@ $todo
 * compilationmodel (Project,Package,File) (C/C++)
 * _runtime info here_
 * _target info here_
-* _inlining info here_
+* _inlining info here_ Default = "true",
+				Disabled = "false",
+				Explicit = "true",
+				Auto = "true",
 * boundscheck Off,SafeOnly,On
 * debuginfo None = "None",
 			VS = "VS",
