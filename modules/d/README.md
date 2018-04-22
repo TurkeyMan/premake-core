@@ -65,11 +65,10 @@ C and C++ projects that include .d files will also support some of the API below
 * [docname](https://github.com/premake/premake-dlang/wiki/docname)
 * [headerdir](https://github.com/premake/premake-dlang/wiki/headerdir)
 * [headername](https://github.com/premake/premake-dlang/wiki/headername)
-$todo
-* dependenciesfile (C/C++)
-* jsonfile (C/C++)
-* stringimportpaths (C/C++)
-* compilationmodel (Project,Package,File) (C/C++)
+* dependenciesfile 
+* jsonfile 
+* stringimportpaths
+* compilationmodel (Project,Package,File) 
 * _runtime info here_
 * _target info here_
 * _inlining info here_ Default = "true",
