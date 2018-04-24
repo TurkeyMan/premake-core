@@ -47,50 +47,38 @@ C and C++ projects that include .d files will also support some of the API below
   * CodeCoverage
   * UnitTest 
   * Verbose 
+  * Profile
   * ProfileGC 
   * StackFrame 
   * StackStomp 
   * AllTemplateInst 
   * BetterC 
   * Main 
-  * PerformSyntaxCheckOnly 
   * ShowCommandLine 
   * ShowTLS 
   * ShowGC 
   * IgnorePragma 
-  * ShowDependencies 
+  * ShowDependencies
 * [versionconstants](https://github.com/premake/premake-dlang/wiki/versionconstants)
 * [debugconstants](https://github.com/premake/premake-dlang/wiki/debugconstants)
 * [docdir](https://github.com/premake/premake-dlang/wiki/docdir)
 * [docname](https://github.com/premake/premake-dlang/wiki/docname)
 * [headerdir](https://github.com/premake/premake-dlang/wiki/headerdir)
 * [headername](https://github.com/premake/premake-dlang/wiki/headername)
-* dependenciesfile 
-* jsonfile 
-* stringimportpaths
-* compilationmodel (Project,Package,File) 
-* _runtime info here_
-* _target info here_
-* _inlining info here_ Default = "true",
-				Disabled = "false",
-				Explicit = "true",
-				Auto = "true",
-* boundscheck Off,SafeOnly,On
-* debuginfo None = "None",
-			VS = "VS",
-			Mago = "Mago",
-* debugcode 
-        DebugFull
-        DebugLight
-        Release
-* dwarnings 
-        "Error",
-        "Info",
-        "None",
-* deprecatedfeatures 
-        "Error",
-        "Info",
-        "Allow",
+* dependenciesfile ("filename")
+* jsonfile  ("filename")
+* importpaths { "paths" }
+* stringimportpaths { "paths" }
+* compilationmodel ("model") [ Project, Package, File ]
+* runtime ("type") [ Debug, Release ]
+* staticruntime ("state") [ on, off ]
+* [optimize](https://github.com/premake/premake-core/wiki/optimize)
+* [inlining](https://github.com/premake/premake-core/wiki/inlining)
+* boundscheck ("type") [Off, SafeOnly, On]
+* debuginfo ("type") [ None, VS, Mago ]
+* debugcode ("type") [ DebugFull, DebugLight, Release ]
+* dwarnings ("warning") [ Error, Info, None ]
+* deprecatedfeatures ("feature") [ Error, Info, Allow ]
 		
 ### Example ###
 

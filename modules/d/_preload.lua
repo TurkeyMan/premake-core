@@ -129,7 +129,21 @@
 		kind = "string",
 		tokens = true,
 	}
+
+	api.register {
+		name = "compilationmodel",
+		scope = "config",
+		kind = "string",
+		tokens = true,
+	}
 	
+	api.register {
+		name = "importpaths",
+		scope = "config",
+		kind = "list:string",
+		tokens = true,
+	}
+
 	api.register {
 		name = "stringimportpaths",
 		scope = "config",

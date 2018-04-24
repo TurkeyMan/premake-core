@@ -401,7 +401,7 @@
 	m.elements.dCompile = function(cfg)
 		local calls = {
 			m.dOptimization,
-			m.dAdditionalIncludeDirectories,
+			m.dImportPaths,
 			m.dStringImportPaths,
 			m.dVersionConstants,
 			m.dDebugConstants,
@@ -806,7 +806,7 @@
 					return {
 						m.excludedFromBuild,
 						m.dOptimization,
-						m.dAdditionalIncludeDirectories,
+						m.dImportPaths,
 						m.dStringImportPaths,
 						m.dVersionConstants,
 						m.dDebugConstants,
@@ -2721,16 +2721,16 @@
 	end
 	
 
-	function m.dAdditionalIncludeDirectories(cfg, condition)
-		if cfg.includedirs then
-			local includedirs = table.concat(cfg.includedirs, ";") .. ";%%(ImportPaths)"
-			m.element("ImportPaths", condition, includedirs)
+	function m.dImportPaths(cfg, condition)
+		if cfg.importpaths and #cfg.importpaths > 0 then
+			local importpaths = table.concat(cfg.importpaths, ";") .. ";%%(ImportPaths)"
+			m.element("ImportPaths", condition, importpaths)
 		end
 	end
 	
 
 	function m.dStringImportPaths(cfg, condition)
-		if cfg.stringimportpaths then
+		if cfg.stringimportpaths and #cfg.stringimportpaths > 0 then
 			local stringimportpaths = table.concat(cfg.stringimportpaths, ";") .. ";%%(StringImportPaths)"
 			m.element("StringImportPaths", condition, stringimportpaths)
 		end
@@ -2738,7 +2738,7 @@
 
 
 	function m.dVersionConstants(cfg, condition)
-		if cfg.versionconstants then
+		if cfg.versionconstants and #cfg.versionconstants > 0 then
 			local versionconstants = table.concat(cfg.versionconstants, ";")
 			m.element("VersionIdentifiers", condition, versionconstants)
 		end
@@ -2746,7 +2746,7 @@
 	
 
 	function m.dDebugConstants(cfg, condition)
-		if cfg.debugconstants then
+		if cfg.debugconstants and #cfg.debugconstants > 0 then
 			local debugconstants = table.concat(cfg.debugconstants, ";")
 			m.element("DebugIdentifiers", condition, debugconstants)
 		end
@@ -2756,11 +2756,11 @@
 	function m.dCompilationModel(cfg, condition)
 		if cfg.compilationmodel then
 			if cfg.compilationmodel == "Project" then
-				m.element("CompilationModel", condition, "Package")
+				m.element("CompilationModel", condition, "Project")
 			elseif cfg.compilationmodel == "Package" then
 				m.element("CompilationModel", condition, "Package")
 			elseif cfg.compilationmodel == "File" then
-				m.element("CompilationModel", condition, "Package")
+				m.element("CompilationModel", condition, "File")
 			end
 		end
 	end
@@ -2794,48 +2794,34 @@
 
 	
 	function m.dCodeGeneration(cfg, condition)
-		local isOptimised = config.isOptimizedBuild(cfg)
-		
 		if cfg.buildtarget then
 			local ObjectFileName = ""
+			if cfg.buildtarget.basename then
+				if cfg.buildtarget.prefix then
+					ObjectFileName = cfg.buildtarget.prefix
+				end
+				ObjectFileName = ObjectFileName .. cfg.buildtarget.basename .. ".obj"
+			end
 			if cfg.buildtarget.directory then
 				local outdir = vstudio.path(cfg, cfg.buildtarget.directory)
-				ObjectFileName = outdir
-			end
-			if cfg.buildtarget.prefix then
-				ObjectFileName = ObjectFileName .. cfg.buildtarget.prefix
-			end
-			if cfg.buildtarget.basename then
-				ObjectFileName = ObjectFileName .. cfg.buildtarget.basename .. ".obj"
+				ObjectFileName = path.join(outdir, ObjectFileName)
 			end
 			m.element("ObjectFileName", condition, ObjectFileName)
 		end
-
-		if cfg.flags.Profile then
-			if cfg.flags.Profile == true then
-				m.element("Profile", condition, "true")
-			else
-				m.element("Profile", condition, "false")
+		
+		if cfg.optimize then
+			if config.isOptimizedBuild(cfg) then
+				m.element("Optimizer", condition, "true")
 			end
+		end
+		if cfg.flags.Profile then
+			m.element("Profile", condition, "true")
 		end
 		if cfg.flags.CodeCoverage then
-			if cfg.flags.CodeCoverage == true then
-				m.element("Coverage", condition, "true")
-			else
-				m.element("Coverage", condition, "false")
-			end
+			m.element("Coverage", condition, "true")
 		end
 		if cfg.flags.UnitTest then
-			if cfg.flags.UnitTest == true then
-				m.element("Unittest", condition, "true")
-			else
-				m.element("Unittest", condition, "false")
-			end
-		end
-		if isOptimised == true then
-			m.element("Optimizer", condition, "true")
-		else
-			m.element("Optimizer", condition, "false")
+			m.element("Unittest", condition, "true")
 		end
 		if cfg.inlining then
 			local types = {
@@ -2871,53 +2857,25 @@
 			m.element("DebugInfo", condition, types[cfg.debuginfo])
 		end
 		if cfg.flags.ProfileGC then
-			if cfg.flags.ProfileGC == true then
-				m.element("ProfileGC", condition, "true")
-			else
-				m.element("ProfileGC", condition, "false")
-			end
+			m.element("ProfileGC", condition, "true")
 		end
 		if cfg.flags.StackFrame then
-			if cfg.flags.StackFrame == true then
-				m.element("StackFrame", condition, "true")
-			else
-				m.element("StackFrame", condition, "false")
-			end
+			m.element("StackFrame", condition, "true")
 		end
 		if cfg.flags.StackStomp then
-			if cfg.flags.StackStomp == true then
-				m.element("StackStomp", condition, "true")
-			else
-				m.element("StackStomp", condition, "false")
-			end
+			m.element("StackStomp", condition, "true")
 		end
 		if cfg.flags.AllTemplateInst then
-			if cfg.flags.AllTemplateInst == true then
-				m.element("AllInst", condition, "true")
-			else
-				m.element("AllInst", condition, "false")
-			end
+			m.element("AllInst", condition, "true")
 		end
 		if cfg.flags.BetterC then
-			if cfg.flags.BetterC == true then
-				m.element("BetterC", condition, "true")
-			else
-				m.element("BetterC", condition, "false")
-			end
+			m.element("BetterC", condition, "true")
 		end
 		if cfg.flags.Main then
-			if cfg.flags.Main == true then
-				m.element("Main", condition, "true")
-			else
-				m.element("Main", condition, "false")
-			end
+			m.element("Main", condition, "true")
 		end
 		if cfg.flags.PerformSyntaxCheckOnly then
-			if cfg.flags.PerformSyntaxCheckOnly == true then
-				m.element("PerformSyntaxCheckOnly", condition, "true")
-			else
-				m.element("PerformSyntaxCheckOnly", condition, "false")
-			end
+			m.element("PerformSyntaxCheckOnly", condition, "true")
 		end
 	end
 		
@@ -2940,46 +2898,22 @@
 			m.element("Deprecations", condition, types[cfg.deprecatedfeatures])
 		end
 		if cfg.flags.ShowCommandLine then
-			if cfg.flags.ShowCommandLine == true then
-				m.element("ShowCommandLine", condition, "true")
-			else
-				m.element("ShowCommandLine", condition, "false")
-			end
+			m.element("ShowCommandLine", condition, "true")
 		end
 		if cfg.flags.Verbose then
-			if cfg.flags.Verbose == true then
-				m.element("Verbose", condition, "true")
-			else
-				m.element("Verbose", condition, "false")
-			end
+			m.element("Verbose", condition, "true")
 		end
 		if cfg.flags.ShowTLS then
-			if cfg.flags.ShowTLS == true then
-				m.element("ShowTLS", condition, "true")
-			else
-				m.element("ShowTLS", condition, "false")
-			end
+			m.element("ShowTLS", condition, "true")
 		end
 		if cfg.flags.ShowGC then
-			if cfg.flags.ShowGC == true then
-				m.element("ShowGC", condition, "true")
-			else
-				m.element("ShowGC", condition, "false")
-			end
+			m.element("ShowGC", condition, "true")
 		end
 		if cfg.flags.IgnorePragma then
-			if cfg.flags.IgnorePragma == true then
-				m.element("IgnorePragma", condition, "true")
-			else
-				m.element("IgnorePragma", condition, "false")
-			end
+			m.element("IgnorePragma", condition, "true")
 		end
 		if cfg.flags.ShowDependencies then
-			if cfg.flags.ShowDependencies == true then
-				m.element("ShowDependencies", condition, "true")
-			else
-				m.element("ShowDependencies", condition, "false")
-			end
+			m.element("ShowDependencies", condition, "true")
 		end
 	end
 
