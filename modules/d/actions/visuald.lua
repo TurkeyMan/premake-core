@@ -1,5 +1,5 @@
 --
--- d/actions/vstudio.lua
+-- d/actions/visuald.lua
 -- Generate a VisualD .visualdproj project.
 -- Copyright (c) 2012-2015 Manu Evans and the Premake project
 --
