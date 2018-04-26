@@ -24,21 +24,19 @@
 	api.addAllowed("floatingpoint", "None")
 	api.addAllowed("flags", {
 		"CodeCoverage",
-		"Deprecated",
+		"Deprecated",			-- DEPRECATED
 		"Documentation",
 		"GenerateHeader",
 		"GenerateJSON",
 		"GenerateMap",
-		"NoBoundsCheck",
---		"PIC",		// Note: this should be supported elsewhere...
+		"NoBoundsCheck",		-- DEPRECATED
 		"Profile",
 		"Quiet",
 --		"Release",	// Note: We infer this flag from config.isDebugBuild()
 		"RetainPaths",
-		"SeparateCompilation",
+		"SeparateCompilation",	-- DEPRECATED
 		"SymbolsLikeC",
 		"UnitTest",
-		"Verbose",
 		-- These are used by C++/D mixed $todo move them somewhere else? "flags2" "Dflags"?
 		-- [Code Generation Flags]
 		"ProfileGC",
@@ -50,7 +48,7 @@
 		"PerformSyntaxCheckOnly",
 		-- [Messages Flags]
 		"ShowCommandLine",
-		--"Verbose",
+		"Verbose",
 		"ShowTLS",
 		"ShowGC",
 		"IgnorePragma",
@@ -116,45 +114,35 @@
 		tokens = true,
 	}
 
-	api.register {
-		name = "debuginfo",
-		scope = "config",
-		kind = "string",
-		tokens = true,
-	}
-
-	api.register {
-		name = "debugcode",
-		scope = "config",
-		kind = "string",
-		tokens = true,
-	}
+--	api.register {
+--		name = "debugcode",
+--		scope = "config",
+--		kind = "string",
+--	}
 
 	api.register {
 		name = "compilationmodel",
 		scope = "config",
 		kind = "string",
-		tokens = true,
+		allowed = {
+			"Default",
+			"File",
+			"Package",	-- TODO: this doesn't work with gmake!!
+			"Project",
+		},
 	}
-	
+
 	api.register {
-		name = "importpaths",
+		name = "importdirs",
 		scope = "config",
 		kind = "list:string",
 		tokens = true,
 	}
 
 	api.register {
-		name = "stringimportpaths",
+		name = "stringimportdirs",
 		scope = "config",
 		kind = "list:string",
-		tokens = true,
-	}
-
-	api.register {
-		name = "dwarnings",
-		scope = "config",
-		kind = "string",
 		tokens = true,
 	}
 
@@ -162,14 +150,24 @@
 		name = "deprecatedfeatures",
 		scope = "config",
 		kind = "string",
-		tokens = true,
+		allowed = {
+			"Default",
+			"Allow",
+			"Warn",
+			"Error",
+		},
 	}
-	
+
 	api.register {
 		name = "boundscheck",
 		scope = "config",
 		kind = "string",
-		tokens = true,
+		allowed = {
+			"Default",
+			"Off",
+			"On",
+			"SafeOnly",
+		},
 	}
 
 	api.register {
@@ -178,7 +176,7 @@
 		kind = "string",
 		tokens = true,
 	}
-	
+
 	api.register {
 		name = "jsonfile",
 		scope = "config",
@@ -200,6 +198,35 @@
 			{ "ldc", "LLVM LDC (ldc2)" },
 		}
 	}
+
+
+--
+-- Deprecate old stuff
+--
+
+	api.deprecateValue("flags", "SeparateCompilation", 'Use `compilationmodel "File"` instead',
+	function(value)
+		compilationmodel "File"
+	end,
+	function(value)
+		compilationmodel "Default"
+	end)
+
+	api.deprecateValue("flags", "Deprecated", 'Use `deprecatedfeatures "Allow"` instead',
+	function(value)
+		deprecatedfeatures "Allow"
+	end,
+	function(value)
+		deprecatedfeatures "Default"
+	end)
+
+	api.deprecateValue("flags", "NoBoundsCheck", 'Use `boundscheck "Off"` instead',
+	function(value)
+		boundscheck "Off"
+	end,
+	function(value)
+		boundscheck "Default"
+	end)
 
 
 --
